@@ -1,5 +1,5 @@
 {
-  "name": "node-red-pyrler",
+  "name": "node-red-contrib-pyrler",
   "version": "0.1.0",
   "description": "Node-RED",
   "main": "index.js",
