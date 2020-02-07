@@ -18,15 +18,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pyrler/node-red-contrib-pyrler.git"
+    "url": "git+https://github.com/pyrler/node-red-contrib-pyrler.git"
   },
   "bugs": {
-   "url": "https://github.com/pyrler/node-red-contrib-pyrler/issues"
- },
+    "url": "https://github.com/pyrler/node-red-contrib-pyrler/issues"
+  },
   "node-red": {
     "nodes": {
       "unifi": "nodes/unifi.js",
       "blinds": "nodes/blinds.js"
     }
-  }
+  },
+  "homepage": "https://github.com/pyrler/node-red-contrib-pyrler#readme"
 }
