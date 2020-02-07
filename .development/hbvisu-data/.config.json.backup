@@ -500,7 +500,7 @@
      "view-show-grid": true
     }
    },
-   "menu-menu-item-sidebar": false
+   "menu-menu-item-sidebar": true
   }
  }
 }
