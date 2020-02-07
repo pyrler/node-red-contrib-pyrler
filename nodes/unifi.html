@@ -1,0 +1,44 @@
+<script type="text/javascript">
+  RED.nodes.registerType("unifi", {
+    category: "pyrler",
+    color: "#7CFC00",
+    defaults: {
+      name: { value: "" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "function.png",
+    outputLabels: ["Output"],
+    paletteLabel: 'Unifi',
+    label: function() { return this.name || "Unifi"; },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="unifi">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="unifi">
+  <p>
+    <h2>Description</h2>
+    This node searches for a Device in your Unifi Network by searching by mac adress. <br>
+  </p>
+	<p>
+    <dl class="message-properties">
+      <h2> Inputs</h2>
+        <dt>
+          <code>msg.mac</code>
+          <span class="property-type">string</span>
+        </dt>
+        <dd>mac adress for searching in Network</dd>
+
+	  <dl class="message-properties">
+			<h2> Outputs</h2>
+        <dt>Output<span class="property-type">boolean</span></dt>
+          <dd>true = Online // false = Offline</dd>
+    </dl>
+  </p>
+</script>

@@ -1,0 +1,107 @@
+<script type="text/javascript">
+  RED.nodes.registerType("binds", {
+    category: "pyrler",
+    color: "#7CFC00",
+    defaults: {
+      name: { value: "" },
+      timeUp: { value: "35", required: true},
+      timeDown: { value: "35", required: true},
+      sunStart: { value: "110", required: true},
+      sunEnd: { value: "210", required: true},
+      sunHeightMin: { value: "30", required: true},
+      temp: { value: "23"},
+      var_enable: { value: "", type: "var-config", required: true },
+      sonne_hoehe: { value: "", type: "var-config", required: true },
+      sonne_winkel: { value: "", type: "var-config", required: true }
+    },
+    inputs: 1,
+    outputs: 4,
+    outputLabels: ["auf", "ab", "Beschattung aktiv","Automatik aktiv"],
+    icon: "function.png",
+    paletteLabel: 'Blind',
+    label: function() { return this.name || "Blind"; },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="blinds">
+
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-timeAuf"><i class="fa fa-clock-o"></i>Rolladen öffnen [s]</label>
+    <input type="number" id="node-input-timeAuf" step="1" min="0">
+  </div>
+  <div class="form-row">
+    <label for="node-input-timeAb"><i class="fa fa-clock-o"></i>Rolladen schliessen [s]</label>
+    <input type="number" id="node-input-timeAb" step="1" min="0">
+  </div>
+  <div class="form-row">
+    <label for="node-input-sunStart"><i class="fa fa-globe"></i>Winkel, ab wann die Beschattung startet [°]</label>
+    <input type="number" id="node-input-sunStart" step="5" min="0" max="360">
+  </div>
+  <div class="form-row">
+    <label for="node-input-sunEnd"><i class="fa fa-globe"></i>Winkel, ab wann die Beschattung endet [°]</label>
+    <input type="number" id="node-input-sunEnd" step="5" min="0" max="360">
+  </div>
+  <div class="form-row">
+    <label for="node-input-sunHeightMin"><i class="fa fa-globe"></i>Höhe, ab wann die Beschattung startet [°]</label>
+    <input type="number" id="node-input-sunHeightMin" step="5" min="0" max="90">
+  </div>
+  <div class="form-row">
+    <label for="node-input-temp"><i class="fa fa-globe"></i>Min. Temp im Raum [°C]</label>
+    <input type="number" id="node-input-temp">
+  </div>
+  <div class="form-row">
+    <label for="node-input-var_enable"><i class="fa fa-sitemap"></i> Beschatten freigegeben</label>
+    <input type="text" id="node-input-var_enable">
+  </div>
+  <div class="form-row">
+    <label for="node-input-sonne_hoehe"><i class="fa fa-sitemap"></i> Variabel für Sonnenhöhe</label>
+    <input type="text" id="node-input-sonne_hoehe">
+  </div>
+  <div class="form-row">
+    <label for="node-input-sonne_winkel"><i class="fa fa-sitemap"></i> Variabel für Sonnenwinkel</label>
+    <input type="text" id="node-input-sonne_winkel">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="blinds">
+  <p>
+    <h2>Allgemein</h2>
+    Node zum ansteuern eines Dachfensterrollos inkl. Beschattungsautomatik <br>
+	Damit die Automatik funktioniert, müssen folgende Globale Variabeln deklariert sein:<br>
+	<code>sonne.winkel</code> 	= Winkel der Sonne
+	<code>sonne.hoehe</code>	= Höhe der Sonne
+  <code>sonne.enable</code>	= Bestimmt, ob die Beschattung erlaubt ist (z.B. Abhängig von Aussentemperatur)
+  </p>
+	<p>
+	<dl class="message-properties">
+			 <h2> Inputs</h2>
+        <dt><code>msg.topic = fahren</code> <span class="property-type">boolean</span></dt>
+            <dd>Ansteuerung Taster: true = ab; false = auf</dd>
+
+			  <dt><code>msg.topic = automatik</code> <span class="property-type">boolean</span></dt>
+            <dd>Beschattungsautomatik: true = ein; false = aus</dd>
+        </dl>
+
+        <dt><code>msg.topic = temp</code> <span class="property-type">number</span></dt>
+           <dd>Mindesttemperatur im Raum, ab welcher automatisch Beschattet wird</dd>
+        </dl>
+
+	<dl class="message-properties">
+			 <h2> Outputs</h2>
+            <dt>Output 1 <span class="property-type">boolean</span></dt>
+            <dd>Auf - True wenn Motor auf fahren soll</dd>
+			<dt>Output 2 <span class="property-type">boolean</span></dt>
+            <dd>Ab - True wenn Motor ab fahren soll</dd>
+			<dt>Output 3 <span class="property-type">boolean</span></dt>
+            <dd>Beschattungsautomatik - true, wenn aktiv Beschattet wird<br>
+				Nicht = topic automatik!
+			<dt>Output 4 <span class="property-type">boolean</span></dt>
+            <dd>Beschattungsautomatik - true, wenn Automatik aktiviert ist</dd>
+     </dl>
+  </p>
+</script>

@@ -1,0 +1,32 @@
+{
+  "name": "node-red-pyrler",
+  "version": "0.1.0",
+  "description": "Node-RED",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node-red",
+    "node",
+    "red",
+    "unifi",
+    "sonos",
+    "blinds"
+  ],
+  "author": "pyrler",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pyrler/node-red-contrib-pyrler.git"
+  },
+  "bugs": {
+   "url": "https://github.com/pyrler/node-red-contrib-pyrler/issues"
+ },
+  "node-red": {
+    "nodes": {
+      "unifi": "nodes/unifi.js",
+      "blinds": "nodes/blinds.js"
+    }
+  }
+}
