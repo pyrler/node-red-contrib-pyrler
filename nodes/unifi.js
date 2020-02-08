@@ -7,13 +7,18 @@ module.exports = function(RED) {
     node.config = config;
     let mac = "";
     let element = "";
+    let input = [];
 
     node.on("input", (msg) => {
       if (msg.mac != undefined) {
         mac = msg.mac;
       }
-      if (mac != undefined && msg.payload != undefined) {
-        var matchingEntries = msg.payload[0].filter(function(element) {
+      if (msg.payload != undefined) {
+        input = msg.payload;
+      }
+
+      if (mac != undefined && input.length != 0) {
+        var matchingEntries = input[0].filter(function(element) {
           return element.user === mac;
         });
         if (matchingEntries.length === 0) {
@@ -31,9 +36,6 @@ module.exports = function(RED) {
           node.status({fill: 'green', shape: 'dot', text: "Online"});
         }
       }
-
-      // First, search the array for any entries matching the required mac address
-
     });
   };
   RED.nodes.registerType("unifi", add);
