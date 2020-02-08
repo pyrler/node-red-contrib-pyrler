@@ -6,6 +6,7 @@ module.exports = function(RED) {
     const node = this;
     node.config = config;
     let mac = "";
+    let element = "";
 
     node.on("input", (msg) => {
       if (msg.mac != undefined) {

@@ -462,7 +462,7 @@
   },
   "node-red-contrib-pyrler": {
    "name": "node-red-contrib-pyrler",
-   "version": "0.1.1",
+   "version": "0.1.2",
    "local": false,
    "nodes": {
     "unifi": {
