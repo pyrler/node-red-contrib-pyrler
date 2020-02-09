@@ -1,0 +1,100 @@
+<script type="text/javascript">
+  RED.nodes.registerType("sonos-sender", {
+    category: "pyrler",
+    color: "#7CFC00",
+    defaults: {
+      name: { value: "" }
+    },
+    inputs: 1,
+    outputs: 3,
+    icon: "function.png",
+    outputLabels: ["Control Player", "Manage Radio", "Get Status"],
+    paletteLabel: 'Sonos Sender',
+    label: function() { return this.name || "Send Sonos commands"; },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="sonos-sender">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="sonos-sender">
+  <p>
+    <h2>Description</h2>
+    This node can be used to manage your Sonos System. Testet for node-red-contrib-sonos-plus library<br>
+  </p>
+	<p>
+    <dl class="message-properties">
+      <h2> Inputs</h2>
+      <h3>msg.topic: stationlist / msg.payload:</h3>
+        <dt>
+          <code>[]</code>
+          <span class="property-type">array</span>
+        </dt>
+        <dd>give an array of TuneIn ID's from your favourite radiostations</dd>
+        <br>
+        <h3>msg.topic: none / msg.payload:</h3>
+          <dt>
+            <code>play</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a play command with a default volume and the first TuneIn Station in the given Array</dd>
+          <dt>
+            <code>stop</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a stop command</dd>
+          <dt>
+            <code>pause</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a pause command</dd>
+          <dt>
+            <code>toggle</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>toggle between play / pause</dd>
+          <dt>
+            <code>+</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a command, that increase the volume by 1</dd>
+          <dt>
+            <code>+</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a command, that decrease the volume by 1</dd>
+          <dt>
+            <code>nextsong</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a next_song command</dd>
+          <dt>
+            <code>previoussong</code>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>send a previous_song command</dd>
+
+	  <dl class="message-properties">
+			<h2> Outputs</h2>
+        <h3>Output 1</h3>
+          <dt>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>can be connect to the Control Player Node</dd>
+        <h3>Output 2</h3>
+          <dt>
+            <span class="property-type">string</span>
+          </dt>
+          <dd>can be connect to the Manage Radio Node</dd>
+        <h3>Output 3</h3>
+          <dt>
+            <span class="property-type">boolean</span>
+          </dt>
+          <dd>can be connect to the Get Status Node. This Output sends <code>true</code> with every change at Output 1 or 2</dd>
+    </dl>
+  </p>
+</script>
