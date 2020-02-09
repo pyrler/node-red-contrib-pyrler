@@ -16,6 +16,12 @@ module.exports = function(RED) {
       selectedstation_old: undefined,
       stations: []
     }
+    const clearIntervalRequest = () => {
+      if (node.intervalRequest) {
+        clearInterval(node.intervalRequest);
+      }
+      node.intervalRequest = null;
+    };
 
     node.on("input", (msg) => {
       msg.topic = msg.topic.toLowerCase();
@@ -84,7 +90,7 @@ module.exports = function(RED) {
     }
 
     if (intern.selectedstation != intern.selectedstation_old) {
-      output.selectedstation = intern.selectedstation
+      output.selectedstation = intern.selectedstation;
     } else {
       output.selectedstation = null;
     }
@@ -92,10 +98,26 @@ module.exports = function(RED) {
     intern.volume_old = intern.volume;
     intern.selectedstation_old = intern.selectedstation;
 
-    node.send([{payload: intern.playmode}, {payload: 'play_tunein', topic: output.selectedstation, volume: output.volume}, {payload: true}]);
+    if (!node.intervalRequest) {
+      node.intervalRequest = setInterval(function(){node.send([null, null, {payload: true}]); }, 10 * 1000);
+    }
+
+    if (node.config.sendmode === "MySonos") {
+      node.sendmode = "play_mysonos";
+    } else if (node.config.sendmode === "tuneInID")  {
+      node.sendmode = "play_tunein";
+    }
+
+    node.send([{payload: intern.playmode}, {payload: node.sendmode, topic: output.selectedstation, volume: output.volume}, {payload: true}]);
     node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode + ' | Station: ' + output.selectedstation});
     node.context().set("intern", intern, contextPersist);
     });
+
+    node.on("close", function(removed, done) {
+      clearIntervalRequest();
+      done();
+    });
+
   };
   RED.nodes.registerType("sonos-sender", add);
 }
