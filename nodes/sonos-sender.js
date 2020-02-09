@@ -103,9 +103,9 @@ module.exports = function(RED) {
     }
 
     if (node.config.sendmode === "MySonos") {
-      node.sendmode = "play_tunein";
-    } else if (node.config.sendmode === "tuneInID")  {
       node.sendmode = "play_mysonos";
+    } else if (node.config.sendmode === "tuneInID")  {
+      node.sendmode = "play_tunein";
     }
 
     node.send([{payload: intern.playmode}, {payload: node.sendmode, topic: output.selectedstation, volume: output.volume}, {payload: true}]);
