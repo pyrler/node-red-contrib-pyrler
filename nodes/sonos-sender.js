@@ -18,15 +18,11 @@ module.exports = function(RED) {
     }
 
     node.on("input", (msg) => {
-
+      msg.topic = msg.topic.toLowerCase();
       switch (msg.topic){
         case "stationlist":
           intern.stations = msg.payload;
           break;
-      }
-
-      switch (msg.payload){
-        // msg.payload = msg.payload.toLowerCase();
         case "play":
           if (intern.playmode === 'pause') {
             intern.playmode = 'play';
@@ -69,6 +65,9 @@ module.exports = function(RED) {
           break;
         case "-":
           intern.playmode = '-1';
+          break;
+        case "volume":
+          intern.volume = msg.payload;
           break;
         case "toggle":
           intern.playmode = 'toggleplayback';
