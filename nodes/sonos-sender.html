@@ -3,7 +3,8 @@
     category: "pyrler",
     color: "#7CFC00",
     defaults: {
-      name: { value: "" }
+      name: { value: "" },
+      sendmode: { value: "MySonos" }
     },
     inputs: 1,
     outputs: 3,
@@ -19,6 +20,15 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name">
   </div>
+
+  <div class="form-row">
+    <label for="node-input-sendmode"><i class="fa fa-clock-o"></i>Stationlist is: </label>
+    <select id="node-input-sendmode" style="width:70%">
+      <option value="MySonos">My Sonos</option>
+      <option value="tuneInID">TuneIn ID's</option>
+    </select>
+  </div>
+
 </script>
 
 <script type="text/x-red" data-help-name="sonos-sender">

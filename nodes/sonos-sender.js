@@ -90,7 +90,7 @@ module.exports = function(RED) {
     }
 
     if (intern.selectedstation != intern.selectedstation_old) {
-      output.selectedstation = intern.selectedstation
+      output.selectedstation = intern.selectedstation;
     } else {
       output.selectedstation = null;
     }
@@ -102,7 +102,13 @@ module.exports = function(RED) {
       node.intervalRequest = setInterval(function(){node.send([null, null, {payload: true}]); }, 10 * 1000);
     }
 
-    node.send([{payload: intern.playmode}, {payload: output.selectedstation, volume: output.volume}, {payload: true}]);
+    if (node.config.sendmode === "MySonos") {
+      node.sendmode = "play_tunein";
+    } else if (node.config.sendmode === "tuneInID")  {
+      node.sendmode = "play_mysonos";
+    }
+
+    node.send([{payload: intern.playmode}, {payload: node.sendmode, topic: output.selectedstation, volume: output.volume}, {payload: true}]);
     node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode + ' | Station: ' + output.selectedstation});
     node.context().set("intern", intern, contextPersist);
     });
