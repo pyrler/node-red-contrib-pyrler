@@ -26,7 +26,7 @@ module.exports = function(RED) {
     node.on("input", (msg) => {
       msg.topic = msg.topic.toLowerCase();
       switch (msg.topic){
-        case "status":
+        case "state":
           if (msg.state === "stopped") {
             intern.playmode = "stopped";
           } else if (msg.state === "playing") {
@@ -34,7 +34,7 @@ module.exports = function(RED) {
           } else if (msg.state === "paused") {
             intern.playmode = "pause";
           }
-          node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode + ' | Station: ' + output.selectedstation});
+          node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode});
           node.context().set("intern", intern, contextPersist);
           return;
         case "stationlist":
@@ -115,14 +115,14 @@ module.exports = function(RED) {
       node.sendmode = "play_tunein";
     }
 
-    node.send([{payload: intern.playmode}, {payload: node.sendmode, topic: output.selectedstation, volume: output.volume}, {payload: true}]);
+    node.send([{payload: intern.playmode}, {payload: node.sendmode, topic: output.selectedstation, volume: output.volume}, {payload: "get_volume"}, {payload: "get_songinfo", suppressWarnings: true},{payload: "get_basics"}]);
     node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode + ' | Station: ' + output.selectedstation});
     node.context().set("intern", intern, contextPersist);
     });
 
     RED.events.once("nodes-started", () => {
       if (!node.intervalRequest) {
-        node.intervalRequest = setInterval(function(){node.send([null, null, {payload: true}]); }, 10 * 1000);
+        node.intervalRequest = setInterval(function(){node.send([null, null, {payload: "get_volume"}, {payload: "get_songinfo", suppressWarnings: true},{payload: "get_basics"}]); }, 10 * 1000);
       }
     });
 
