@@ -26,6 +26,17 @@ module.exports = function(RED) {
     node.on("input", (msg) => {
       msg.topic = msg.topic.toLowerCase();
       switch (msg.topic){
+        case "status":
+          if (msg.state === "stopped") {
+            intern.playmode = "stopped";
+          } else if (msg.state === "playing") {
+            intern.playmode = "play";
+          } else if (msg.state === "paused") {
+            intern.playmode = "pause";
+          }
+          node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode + ' | Station: ' + output.selectedstation});
+          node.context().set("intern", intern, contextPersist);
+          return;
         case "stationlist":
           intern.stations = msg.payload;
           break;
