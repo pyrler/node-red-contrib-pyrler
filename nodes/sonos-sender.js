@@ -98,10 +98,6 @@ module.exports = function(RED) {
     intern.volume_old = intern.volume;
     intern.selectedstation_old = intern.selectedstation;
 
-    if (!node.intervalRequest) {
-      node.intervalRequest = setInterval(function(){node.send([null, null, {payload: true}]); }, 10 * 1000);
-    }
-
     if (node.config.sendmode === "MySonos") {
       node.sendmode = "play_mysonos";
     } else if (node.config.sendmode === "tuneInID")  {
@@ -111,6 +107,12 @@ module.exports = function(RED) {
     node.send([{payload: intern.playmode}, {payload: node.sendmode, topic: output.selectedstation, volume: output.volume}, {payload: true}]);
     node.status({fill: 'green', shape: 'dot', text: 'Mode: ' + intern.playmode + ' | Station: ' + output.selectedstation});
     node.context().set("intern", intern, contextPersist);
+    });
+
+    RED.events.once("nodes-started", () => {
+      if (!node.intervalRequest) {
+        node.intervalRequest = setInterval(function(){node.send([null, null, {payload: true}]); }, 10 * 1000);
+      }
     });
 
     node.on("close", function(removed, done) {
