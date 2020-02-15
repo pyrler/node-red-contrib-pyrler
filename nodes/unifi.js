@@ -2,16 +2,19 @@ module.exports = function(RED) {
 
   function add(config) {
     RED.nodes.createNode(this, config);
+    const utils = require("./utils/getcontextStorage.js");
+    let contextPersist = utils.getPersistContext(RED);
+    intern = node.context().get("intern", contextPersist) || {
+      mac: ""
+    }
 
     const node = this;
     node.config = config;
-    let mac = "";
-    let element = "";
     let input = [];
 
     node.on("input", (msg) => {
       if (msg.mac != undefined) {
-        mac = msg.mac;
+        intern.mac = msg.mac;
       }
       if (msg.payload != undefined) {
         input = msg.payload;

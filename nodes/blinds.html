@@ -1,22 +1,19 @@
 <script type="text/javascript">
-  RED.nodes.registerType("binds", {
+  RED.nodes.registerType("blinds", {
     category: "pyrler",
     color: "#7CFC00",
     defaults: {
       name: { value: "" },
       timeUp: { value: "35", required: true},
       timeDown: { value: "35", required: true},
-      sunStart: { value: "110", required: true},
-      sunEnd: { value: "210", required: true},
+      AzimutStart: { value: "110", required: true},
+      AzimutEnd: { value: "210", required: true},
       sunHeightMin: { value: "30", required: true},
-      temp: { value: "23"},
-      var_enable: { value: "", type: "var-config", required: true },
-      sonne_hoehe: { value: "", type: "var-config", required: true },
-      sonne_winkel: { value: "", type: "var-config", required: true }
+      tempMin: { value: "23"}
     },
     inputs: 1,
     outputs: 4,
-    outputLabels: ["auf", "ab", "Beschattung aktiv","Automatik aktiv"],
+    outputLabels: ["Up", "Down", "Blind is in automatic Position","Automatic is active"],
     icon: "function.png",
     paletteLabel: 'Blind',
     label: function() { return this.name || "Blind"; },
@@ -31,40 +28,28 @@
   </div>
 
   <div class="form-row">
-    <label for="node-input-timeAuf"><i class="fa fa-clock-o"></i>Rolladen öffnen [s]</label>
-    <input type="number" id="node-input-timeAuf" step="1" min="0">
+    <label for="node-input-timeUp"><i class="fa fa-clock-o"></i>Time to open [s]</label>
+    <input type="number" id="node-input-timeUp" step="1" min="0">
   </div>
   <div class="form-row">
-    <label for="node-input-timeAb"><i class="fa fa-clock-o"></i>Rolladen schliessen [s]</label>
-    <input type="number" id="node-input-timeAb" step="1" min="0">
+    <label for="node-input-timeDown"><i class="fa fa-clock-o"></i>Time to close [s]</label>
+    <input type="number" id="node-input-timeDown" step="1" min="0">
   </div>
   <div class="form-row">
-    <label for="node-input-sunStart"><i class="fa fa-globe"></i>Winkel, ab wann die Beschattung startet [°]</label>
-    <input type="number" id="node-input-sunStart" step="5" min="0" max="360">
+    <label for="node-input-AzimutStart"><i class="fa fa-globe"></i>Azimut to start automatic [°]</label>
+    <input type="number" id="node-input-AzimutStart" step="5" min="0" max="360">
   </div>
   <div class="form-row">
-    <label for="node-input-sunEnd"><i class="fa fa-globe"></i>Winkel, ab wann die Beschattung endet [°]</label>
-    <input type="number" id="node-input-sunEnd" step="5" min="0" max="360">
+    <label for="node-input-AzimutEnd"><i class="fa fa-globe"></i>Azimut to stop automatic [°]</label>
+    <input type="number" id="node-input-AzimutEnd" step="5" min="0" max="360">
   </div>
   <div class="form-row">
-    <label for="node-input-sunHeightMin"><i class="fa fa-globe"></i>Höhe, ab wann die Beschattung startet [°]</label>
+    <label for="node-input-sunHeightMin"><i class="fa fa-globe"></i>Minimum Hight of sun to start automatic [°]</label>
     <input type="number" id="node-input-sunHeightMin" step="5" min="0" max="90">
   </div>
   <div class="form-row">
-    <label for="node-input-temp"><i class="fa fa-globe"></i>Min. Temp im Raum [°C]</label>
-    <input type="number" id="node-input-temp">
-  </div>
-  <div class="form-row">
-    <label for="node-input-var_enable"><i class="fa fa-sitemap"></i> Beschatten freigegeben</label>
-    <input type="text" id="node-input-var_enable">
-  </div>
-  <div class="form-row">
-    <label for="node-input-sonne_hoehe"><i class="fa fa-sitemap"></i> Variabel für Sonnenhöhe</label>
-    <input type="text" id="node-input-sonne_hoehe">
-  </div>
-  <div class="form-row">
-    <label for="node-input-sonne_winkel"><i class="fa fa-sitemap"></i> Variabel für Sonnenwinkel</label>
-    <input type="text" id="node-input-sonne_winkel">
+    <label for="node-input-tempMin"><i class="fa fa-globe"></i>Minimum Temp. in room to start automatic [°C]</label>
+    <input type="number" id="node-input-tempMin">
   </div>
 </script>
 
