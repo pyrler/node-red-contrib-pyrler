@@ -39,6 +39,7 @@ module.exports = function(RED) {
           node.status({fill: 'green', shape: 'dot', text: "Online"});
         }
       }
+    node.context().set("intern", intern, contextPersist);
     });
   };
   RED.nodes.registerType("unifi", add);
