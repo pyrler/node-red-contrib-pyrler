@@ -10,8 +10,8 @@
       command: {value:90, required: true },
     },
     credentials: {
-	username: {type:"text"},
-	password: {type:"password"}
+	    username: {type:"text"},
+	    password: {type:"password"}
     },
     inputs: 1,
     outputs: 1,
@@ -27,17 +27,16 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name">
   </div>
-
 	<div class="form-row">
-        <label for="node-input-ip"><i class="fa fa-globe"></i> Server</label>
-        <input class="input-append-left" type="text" id="node-input-ip" placeholder="IP Address" style="width: 40%;" >
-        <label for="node-input-port" style="margin-left: 10px; width: 35px; "> Port</label>
-        <input type="text" id="node-input-port" placeholder="Port" style="width:45px">
-    </div>
+    <label for="node-input-ip"><i class="fa fa-globe"></i> Server</label>
+    <input class="input-append-left" type="text" id="node-input-ip" placeholder="IP Address" style="width: 40%;" >
+    <label for="node-input-port" style="margin-left: 10px; width: 35px; "> Port</label>
+    <input type="text" id="node-input-port" placeholder="Port" style="width:45px">
+  </div>
 	<div class="form-row">
-        <label for="node-input-site"><i class="fa fa-list"></i> Site</label>
-        <input type="text" id="node-input-site" placeholder="Site Name">
-    </div>
+    <label for="node-input-site"><i class="fa fa-list"></i> Site</label>
+    <input type="text" id="node-input-site" placeholder="Site Name">
+  </div>
 	<div class="form-row">
 		<label for="node-input-username"><i class="fa fa-user"></i> Username</label>
 		<input type="text" id="node-input-username" placeholder="Username">
@@ -46,23 +45,24 @@
 		<label for="node-input-password"><i class="fa fa-lock"></i> Password</label>
 		<input type="password" id="node-input-password" placeholder="Password">
 	</div>
-	
+
 	<div class="form-row">
-        <label for="node-input-command"><i class="fa fa-dot-circle-o"></i> Command</label>
-        <select id="node-input-command">
-           <option value="1">SitesStats</option>
-           <option value="10">SiteSysinfo</option>
-           <option value="20">ClientDevices</option>
-	   <option value="30">AllUsers</option>
-	   <option value="40">UserGroups</option>	
-	   <option value="50">Health</option>
-	   <option value="60">Dashboard</option>
-	   <option value="70">AccessDevices</option>
-	   <option value="80">RogueAccessPoints</option>
-	   <option value="90">Events</option>
-           <option value="100">Alarms</option>
-           <option value="110">WLanSettings</option>
-    </div>
+    <label for="node-input-command"><i class="fa fa-dot-circle-o"></i> Command</label>
+    <select id="node-input-command">
+      <option value="1">SitesStats</option>
+      <option value="10">SiteSysinfo</option>
+      <option value="20">ClientDevices</option>
+	    <option value="30">AllUsers</option>
+	    <option value="40">UserGroups</option>
+	    <option value="50">Health</option>
+	    <option value="60">Dashboard</option>
+	    <option value="70">AccessDevices</option>
+	    <option value="80">RogueAccessPoints</option>
+	    <option value="90">Events</option>
+      <option value="100">Alarms</option>
+      <option value="110">WLanSettings</option>
+
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="unifi">
