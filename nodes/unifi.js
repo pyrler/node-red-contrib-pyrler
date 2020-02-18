@@ -1,26 +1,11 @@
 module.exports = function(RED) {
-
+  const unifi = require("node-unifi");
+  const utils = require("./utils/getcontextStorage.js");
   function add(config) {
     RED.nodes.createNode(this, config);
-    const utils = require("./utils/getcontextStorage.js");
-    let contextPersist = utils.getPersistContext(RED);
-    intern = node.context().get("intern", contextPersist) || {
-      mac: ""
-    }
-
     const node = this;
-    //node.config = config;
-    let input = [];
 
-    var nodeunifi = require('node-unifi');
-    var username = node.credentials.username;
-    var password = node.credentials.password;
-    var site = config.site;
-    var ip = config.ip;
-    var port = config.port;
-    var command = config.command;
-
-    var controller = new nodeunifi.Controller(ip, port);
+    var controller = new unifi.Controller(config.ip, config.port);
 
     const STATUS_OK = {
         fill: "green",
@@ -28,68 +13,65 @@ module.exports = function(RED) {
         text: "OK"
     };
 
-    function sendData(data) {
-	    controller.logout();
-	    msg.payload = data;
-	    node.send(msg);
-	    node.status(STATUS_OK);
-    }
-
-    node.on("input", (msg) => {
-      if (msg.mac != undefined) {
-        intern.mac = msg.mac;
-      }
-      if (msg.payload != undefined) {
-        input = msg.payload;
-      }
-
-      controller.login(username, password, function(err) {
+    function getClientDevices()  {
+      controller.login(node.credentials.username, node.credentials.password, function(err) {
 	      if(err) {
 	        console.log('ERROR: ' + err);
 	        node.status({
 	          fill: "red",
 	          shape: "dot",
 	          text: err
-	        });
+	        })
 	        return;
-        }
-      }
-
-      controller.getEvents(site, function(err, events_data) {
-        if(err) {
-		      console.log('ERROR: ' + err);
-		      node.status({
-		        fill: "red",
-		        shape: "dot",
-	          text: err
-	        });
-	      return;
         } else {
-          sendData(events_data);
-	      }
-      });
-
-      if (mac != undefined && input.length != 0) {
-        var matchingEntries = input[0].filter(function(element) {
-          return element.user === mac;
-        });
-        if (matchingEntries.length === 0) {
-        // no matching entires - don't return anything
-          return;
+          controller.getClientDevices (config.site, function(err, events_data) {
+            if(err) {
+              console.log('ERROR: ' + err);
+              node.status({
+                fill: "red",
+                shape: "dot",
+                text: err
+              })
+            return;
+            } else {
+              var events = events_data[0];
+              node.matchingEntries = events.filter(function(element) {
+                   return element.mac === node.mac;
+               });
+              if (node.matchingEntries.length === 0) {
+                sendData(false);
+              } else {
+                sendData(true);
+              }
+            }
+            controller.logout();
+          })
         }
+      })
+    }
 
-        var element = matchingEntries[0];
+    function sendData(data) {
+	    node.send({payload: data});
+      // console.log("Output: " + data);
+	    node.status(STATUS_OK);
+    }
 
-        if (element.key == "EVT_WU_Disconnected") {
-          node.send({payload: false});
-          node.status({fill: 'red', shape: 'dot', text: "Offline"});
-        } else if (element.key == "EVT_WU_Connected")  {
-          node.send({payload: true});
-          node.status({fill: 'green', shape: 'dot', text: "Online"});
-        }
-      }
-    node.context().set("intern", intern, contextPersist);
+    node.on("input", (msg) => {
+      node.mac = msg.payload;
+      getClientDevices();
     });
+
+    RED.events.once("nodes-started", () => {
+      if (!node.functioncyclic) {
+        node.functioncyclic = setInterval(getClientDevices, 10 * 1000);
+      }
+    });
+
+    node.on("close", function(removed, done) {
+      clearInterval(node.functioncyclic);
+      done();
+    });
+
   };
   RED.nodes.registerType("unifi", add,{
     credentials: {

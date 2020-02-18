@@ -7,7 +7,7 @@
       ip: {value:""},
       port: {value:8443, validate:RED.validators.number()},
       site: {value:"default"},
-      command: {value:90, required: true },
+      command: {value:90, required: true }
     },
     credentials: {
 	    username: {type:"text"},
@@ -46,7 +46,7 @@
 		<input type="password" id="node-input-password" placeholder="Password">
 	</div>
 
-	<div class="form-row">
+	<!--<div class="form-row">
     <label for="node-input-command"><i class="fa fa-dot-circle-o"></i> Command</label>
     <select id="node-input-command">
       <option value="1">SitesStats</option>
@@ -61,20 +61,20 @@
 	    <option value="90">Events</option>
       <option value="100">Alarms</option>
       <option value="110">WLanSettings</option>
-
-  </div>
+    </select>
+  </div>-->
 </script>
 
 <script type="text/x-red" data-help-name="unifi">
   <p>
     <h2>Description</h2>
-    This node searches for a Device in your Unifi Network by searching by mac adress. <br>
+    This node searches for a Device in your Unifi Network by searching by mac adress. Searching is triggeret by any input or every 10s. In Feature, time is variable<br>
   </p>
 	<p>
     <dl class="message-properties">
       <h2> Inputs</h2>
         <dt>
-          <code>msg.mac</code>
+          <code>msg.payload</code>
           <span class="property-type">string</span>
         </dt>
         <dd>mac adress for searching in Network</dd>
