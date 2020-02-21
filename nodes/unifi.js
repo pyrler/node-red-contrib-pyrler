@@ -4,8 +4,21 @@ module.exports = function(RED) {
   function add(config) {
     RED.nodes.createNode(this, config);
     const node = this;
+    node.config = config;
+    node.controller = RED.nodes.getNode(config.controller);
 
-    var controller = new unifi.Controller(config.ip, config.port);
+    node.config.interval = parseInt(node.config.interval);
+
+    if (node.config.intervalcheckbox) {
+      if (node.config.interval === 0 || node.config.interval === undefined || isNaN(node.config.interval)) {
+        node.error("Unifi: " + node.config.id + ": no intervaltime set!")
+        return;
+      } else {
+        node.config.interval = node.config.interval * 1000;
+      }
+    }
+
+    var controller = new unifi.Controller(node.controller.ip, node.controller.port);
 
     const STATUS_OK = {
         fill: "green",
@@ -14,7 +27,7 @@ module.exports = function(RED) {
     };
 
     function getClientDevices()  {
-      controller.login(node.credentials.username, node.credentials.password, function(err) {
+      controller.login(node.controller.username, node.controller.password, function(err) {
 	      if(err) {
 	        console.log('ERROR: ' + err);
 	        node.status({
@@ -51,9 +64,18 @@ module.exports = function(RED) {
     }
 
     function sendData(data) {
-	    node.send({payload: data});
-      // console.log("Output: " + data);
-	    node.status(STATUS_OK);
+      if (node.config.rbe) {
+        if (data != node.data_old) {
+          node.send({payload: data});
+          // console.log("Output: " + data);
+    	    node.status(STATUS_OK);
+          node.data_old = data;
+        }
+      } else {
+        node.send({payload: data});
+        // console.log("Output: " + data);
+  	    node.status(STATUS_OK);
+      }
     }
 
     node.on("input", (msg) => {
@@ -62,21 +84,20 @@ module.exports = function(RED) {
     });
 
     RED.events.once("nodes-started", () => {
-      if (!node.functioncyclic) {
-        node.functioncyclic = setInterval(getClientDevices, 10 * 1000);
+      if (node.config.intervalcheckbox) {
+        if (!node.functioncyclic) {
+          node.functioncyclic = setInterval(getClientDevices, node.config.interval);
+        }
       }
     });
 
     node.on("close", function(removed, done) {
-      clearInterval(node.functioncyclic);
+      if (node.config.intervalcheckbox) {
+        clearInterval(node.functioncyclic);
+      }
       done();
     });
 
   };
-  RED.nodes.registerType("unifi", add,{
-    credentials: {
-      username: {type:"text"},
-      password: {type:"password"}
-    }
-  });
+  RED.nodes.registerType("unifi", add);
 }

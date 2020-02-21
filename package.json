@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-pyrler",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Node-RED",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
   "node-red": {
     "nodes": {
       "unifi": "nodes/unifi.js",
+      "controller-config": "nodes/controller-config.js",
       "sonos-sender": "nodes/sonos-sender.js",
       "blinds": "nodes/blinds.js"
     }
