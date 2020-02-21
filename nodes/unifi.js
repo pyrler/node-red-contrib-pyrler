@@ -4,8 +4,10 @@ module.exports = function(RED) {
   function add(config) {
     RED.nodes.createNode(this, config);
     const node = this;
-
-    var controller = new unifi.Controller(config.ip, config.port);
+    node.config = config;
+    node.controller = RED.nodes.getNode(config.controller);
+    node.config.interval = node.config.interval * 1000;
+    var controller = new unifi.Controller(node.controller.ip, node.controller.port);
 
     const STATUS_OK = {
         fill: "green",
@@ -14,7 +16,7 @@ module.exports = function(RED) {
     };
 
     function getClientDevices()  {
-      controller.login(node.credentials.username, node.credentials.password, function(err) {
+      controller.login(node.controller.username, node.controller.password, function(err) {
 	      if(err) {
 	        console.log('ERROR: ' + err);
 	        node.status({
@@ -73,10 +75,5 @@ module.exports = function(RED) {
     });
 
   };
-  RED.nodes.registerType("unifi", add,{
-    credentials: {
-      username: {type:"text"},
-      password: {type:"password"}
-    }
-  });
+  RED.nodes.registerType("unifi", add);
 }
