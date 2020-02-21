@@ -6,8 +6,9 @@
       name: { value: "" },
       controller: { value: "", type: "controller-config", required: true },
       site: {value:"default"},
-      interval: {value:10, validate:RED.validators.number()},
-      rbe: {value:""},
+      interval: {value:10},
+      intervalcheckbox: {value:true},
+      rbe: {value:true},
       command: {value:90, required: true }
     },
     inputs: 1,
@@ -34,11 +35,12 @@
   </div>
   <div class="form-row">
     <label for="node-input-interval"><i class="fa fa-list"></i> Interval[s]</label>
-    <input type="text" id="node-input-interval" placeholder="10">
+    <input class="input-append-left" type="checkbox" id="node-input-intervalcheckbox" style="width: 10%;">
+    <input type="text" id="node-input-interval" style="width: 60%" placeholder="10">
   </div>
   <div class="form-row">
     <label for="node-input-rbe"><i class="fa fa-list"></i> Only send on Change</label>
-    <input type="checkbox" id="node-input-rbe" placeholder="10">
+    <input type="checkbox" id="node-input-rbe">
   </div>
 
 	<!--<div class="form-row">
