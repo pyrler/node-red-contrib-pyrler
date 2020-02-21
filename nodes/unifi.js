@@ -53,9 +53,18 @@ module.exports = function(RED) {
     }
 
     function sendData(data) {
-	    node.send({payload: data});
-      // console.log("Output: " + data);
-	    node.status(STATUS_OK);
+      if (node.config.rbe) {
+        if (data != node.data_old) {
+          node.send({payload: data});
+          // console.log("Output: " + data);
+    	    node.status(STATUS_OK);
+          node.data_old = data;
+        }
+      } else {
+        node.send({payload: data});
+        // console.log("Output: " + data);
+  	    node.status(STATUS_OK);
+      }
     }
 
     node.on("input", (msg) => {
