@@ -11,8 +11,11 @@ If you have an Unifi Network, you can see, if an Device is Online. Searching by 
 Sonos: (Do not use for Productiv!)
 A Node for easy Control your Sonos System (for node-red-contrib-sonos-plus library)
 
+Automatic Blinds:
+For controlling blinds depending on the position of the sun
+
 Feature:
-- Blinds: For controlling blinds depending on the position of the sun
+
 
 
 Idea's are welcome
