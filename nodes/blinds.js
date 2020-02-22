@@ -10,23 +10,17 @@ module.exports = function(RED) {
     node.config.AzimutStart = parseInt(node.config.AzimutStart || 110);
     node.config.AzimutEnd = parseInt(node.config.AzimutEnd || 210);
     node.config.sunHeightMin = parseInt(node.config.sunHeightMin || 30);
-    node.config.tempMin = parseInt(node.config.tempMin);
 
-    let input = node.context().get("intern", contextPersist) || {
-      tempAkt: 0,
-      fahren: false,
-      automatik: false,
-      hoehe: 0,
-      winkel: 0,
-
-    };
     let intern = node.context().get("intern", contextPersist) || {
+      automatik: false,
       automaticInUse: false,
+      handUp: false,
+      handDown: false,
       stand: "",
-      block: false,
-      tempBesch: false,
       auf: false,
       ab: false,
+      hoehe: 0,
+      winkel: 0,
     }
 
     function sender(out1,out2,out3,out4) {
@@ -55,13 +49,13 @@ module.exports = function(RED) {
         intern.stand = "auf";
 			  node.send(sender(intern.auf,null));
 			  node.timerAuf = setTimeout(stop, node.config.timeUp);
-			  node.status({ "fill": "blue", "shape": "dot", "text": "Fahre AUF. Fahrzeit: " + node.config.timeUp + "ms"});
+			  node.status({ "fill": "blue", "shape": "dot", "text": "Drive Up for time: " + node.config.timeUp/1000 + "s"});
 		  } else if (richtung === "ab") {
 			  intern.ab = true;
         intern.stand = "ab";
 			  node.send(sender(null,intern.ab));
 			  node.timerAb = setTimeout(stop, node.config.timeUp);
-			  node.status({ "fill": "blue", "shape": "dot", "text": "Fahre AB. Fahrzeit: "  + node.config.timeUp + "ms"});
+			  node.status({ "fill": "blue", "shape": "dot", "text": "Drive Down for time: "  + node.config.timeUp/1000 + "s"});
 			}
 	  }
 
@@ -69,7 +63,7 @@ module.exports = function(RED) {
 		  intern.auf = false;
 		  intern.ab = false ;
 		  node.send(sender(intern.auf,intern.ab));
-		  node.status({ "fill": "green", "shape": "dot", "text": "steht still. Letzte Fahrtrichtung: " + intern.stand});
+		  node.status({ "fill": "green", "shape": "dot", "text": "Stand still"});
 	   }
 
     function umkehrzeit(richtung) {
@@ -78,66 +72,61 @@ module.exports = function(RED) {
 	   }
 
 	  function cyclic() {
-      if ((input.automatik) && (input.winkel > node.config.AzimutStart) && (input.winkel < node.config.AzimutEnd) && (input.hoehe > node.config.sunHeightMin) && (intern.tempBesch)) { // Wenn Beschattung aktiv
+      if ((intern.automatik) && (intern.winkel > node.config.AzimutStart) && (intern.winkel < node.config.AzimutEnd) && (intern.hoehe > node.config.sunHeightMin)) {
         intern.automaticInUse = true;
-        if (intern.stand === "ab") {         // Wenn noch nicht unten
-        } else {
-          Motorfahren("ab");          // dann abfahren
+        intern.handDown = false;
+        if (intern.stand != "ab" && !intern.handUp) {
+          Motorfahren("ab");
         }
-      } else {                        // Wenn Beschattung nicht mehr aktiv
+      } else if (intern.automatik) {
         intern.automaticInUse = false;
-        if (intern.stand === "auf") {        //Wenn noch unten
-          } else {
-          Motorfahren("auf");         //dann auffahren
+        intern.handUp = false;
+        if (intern.stand != "auf" && !intern.handDown) {
+          Motorfahren("auf");
         }
       }
-      node.send(sender(null,null,intern.automaticInUse,input.automatik));
+      node.context().set("intern",intern, contextPersist);
+      node.send(sender(null,null,intern.automaticInUse,intern.automatik));
 	  }
 
-    // var block damit bei temp änderung oder Beschattung aktivieren/deaktivieren keine Fahrt ausgelöst wird
+
 	  node.on("input", (msg) => {
       switch (msg.topic) {
         case "fahren":
-        input.fahren = msg.payload;
+        intern.automaticInUse = false;
+        if (msg.payload) {
+          intern.handUp = false;
+          intern.handDown = true;
+    			Motorfahren("ab");
+        } else {
+          intern.handUp = true;
+          intern.handDown = false;
+          Motorfahren("auf");
+        }
         break;
         case "automatik":
-        intern.block = true;
-        input.automatik = msg.payload;
+        intern.handUp = false;
+        intern.handDown = false;
+        intern.automatik = msg.payload;
+        if (!msg.payload) {
+          intern.automaticInUse = false;
+        }
         cyclic();
         break;
-        case "temp":
-        intern.block = true;
-        input.tempAkt = msg.payload;
-        break;
         case "sunElevation":
-        input.hoehe = msg.payload;
+        intern.hoehe = msg.payload;
         break;
         case "sunAzimut":
-        input.winkel = msg.payload;
+        intern.winkel = msg.payload;
         break;
       }
 
-  		if ((input.fahren === true) && (intern.block === false)) { // AB
-  			Motorfahren("ab");
-  			input.fahren = undefined;
-      } else if (intern.block === false) {
-        Motorfahren("auf");
-  			input.fahren = undefined;
-      }
-
-      // Hysterese, damit bei Temp. Schwankungen nicht auf/ab gefahren wird
-      if (input.tempAkt > (node.config.tempMin + 0.2))  {
-        intern.tempBesch = true;
-      } else if (input.tempAkt < (node.config.tempMin - 0.2)) {
-        intern.tempBesch = false;
-      }
-
-      intern.block = false;
+      node.context().set("intern",intern, contextPersist);
 	  });
 
     // Events beim Flow starten
     RED.events.once("nodes-started", () => {
-    	node.functioncyclic = setInterval(cyclic,60000);
+    	node.functioncyclic = setInterval(cyclic,20000);
     });
 
     // Events beim Beenden der Flows, Deploy
