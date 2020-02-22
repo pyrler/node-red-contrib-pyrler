@@ -1,9 +1,10 @@
 {
   "name": "node-red-contrib-pyrler",
-  "version": "1.2.0",
+  "version": "1.1.6",
   "description": "Node-RED",
   "main": "index.js",
   "scripts": {
+    "dev": "node node_modules/node-red/red --userDir hbvisu-data",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,6 +15,9 @@
     "sonos",
     "blinds"
   ],
+  "dependencies": {
+    "node-unifi": "1.2.2"
+  },
   "author": "pyrler",
   "license": "MIT",
   "repository": {
@@ -26,6 +30,7 @@
   "node-red": {
     "nodes": {
       "unifi": "nodes/unifi.js",
+      "controller-config": "nodes/controller-config.js",
       "sonos-sender": "nodes/sonos-sender.js",
       "blinds": "nodes/blinds.js"
     }

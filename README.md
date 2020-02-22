@@ -6,7 +6,7 @@ All Nodes are used by your own risk!
 
 
 Unifi:
-If you have an Unifi Network, you can if an Device is Online. Searching by mac adress
+If you have an Unifi Network, you can see, if an Device is Online. Searching by mac adress
 
 Sonos: (Do not use for Productiv!)
 A Node for easy Control your Sonos System (for node-red-contrib-sonos-plus library)
