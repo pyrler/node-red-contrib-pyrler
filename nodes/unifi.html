@@ -65,7 +65,9 @@
 <script type="text/x-red" data-help-name="unifi">
   <p>
     <h2>Description</h2>
-    This node searches for a Device in your Unifi Network by searching by mac adress. Searching is triggeret by any input or every 10s. In Feature, time is variable<br>
+    This node searches for a Device in your Unifi Network by searching by mac adress. Searching is triggeret by any input or at the interval time you have set.<br>
+    intervall: The node will connect to the controller in this interval. Only if the checkbox is active, otherwise the output will only update when an input recieve.
+    send on change: you can set an RBE filter: The Output will only sent, if it changed and at start / deploy
   </p>
 	<p>
     <dl class="message-properties">
@@ -74,7 +76,7 @@
           <code>msg.payload</code>
           <span class="property-type">string</span>
         </dt>
-        <dd>mac adress for searching in Network</dd>
+        <dd>mac adress for searching in the Network</dd>
 
 	  <dl class="message-properties">
 			<h2> Outputs</h2>
