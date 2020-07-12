@@ -86,7 +86,7 @@ module.exports = function(RED) {
         }
       }
       node.context().set("intern",intern, contextPersist);
-      node.send(sender(null,null,intern.automaticInUse,intern.automatik));
+      node.send(sender(null,null,intern.automaticInUse,intern.automatik,intern.stand));
 	  }
 
 
