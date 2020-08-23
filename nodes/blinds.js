@@ -78,7 +78,7 @@ module.exports = function(RED) {
         if (intern.stand != "ab" && !intern.handUp) {
           Motorfahren("ab");
         }
-      } else if (intern.automatik) {
+      } else if (!intern.automatik) {
         intern.automaticInUse = false;
         intern.handUp = false;
         if (intern.stand != "auf" && !intern.handDown) {
@@ -93,31 +93,31 @@ module.exports = function(RED) {
 	  node.on("input", (msg) => {
       switch (msg.topic) {
         case "fahren":
-        intern.automaticInUse = false;
-        if (msg.payload) {
-          intern.handUp = false;
-          intern.handDown = true;
-    			Motorfahren("ab");
-        } else {
-          intern.handUp = true;
-          intern.handDown = false;
-          Motorfahren("auf");
-        }
+          intern.automaticInUse = false;
+          if (msg.payload) {
+            intern.handUp = false;
+            intern.handDown = true;
+    			  Motorfahren("ab");
+          } else {
+            intern.handUp = true;
+            intern.handDown = false;
+            Motorfahren("auf");
+          }
         break;
         case "automatik":
-        intern.handUp = false;
-        intern.handDown = false;
-        intern.automatik = msg.payload;
-        if (!msg.payload) {
-          intern.automaticInUse = false;
-        }
-        cyclic();
+          intern.handUp = false;
+          intern.handDown = false;
+          intern.automatik = msg.payload;
+          if (!msg.payload) {
+            intern.automaticInUse = false;
+          }
+          cyclic();
         break;
         case "sunElevation":
-        intern.hoehe = msg.payload;
+          intern.hoehe = msg.payload;
         break;
         case "sunAzimut":
-        intern.winkel = msg.payload;
+          intern.winkel = msg.payload;
         break;
       }
 
