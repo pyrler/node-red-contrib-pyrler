@@ -78,7 +78,7 @@ module.exports = function(RED) {
         if (intern.stand != "ab" && !intern.handUp) {
           Motorfahren("ab");
         }
-      } else if (!intern.automatik) {
+      } else if (intern.automatik && ((intern.winkel < node.config.AzimutStart) || (intern.winkel > node.config.AzimutEnd) || (intern.hoehe < node.config.sunHeightMin))) {
         intern.automaticInUse = false;
         intern.handUp = false;
         if (intern.stand != "auf" && !intern.handDown) {
