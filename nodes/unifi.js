@@ -83,7 +83,7 @@ module.exports = function(RED) {
       getClientDevices();
     });
 
-    RED.events.once("nodes-started", () => {
+    RED.events.once("flows:started", () => {
       if (node.config.intervalcheckbox) {
         if (!node.functioncyclic) {
           node.functioncyclic = setInterval(getClientDevices, node.config.interval);

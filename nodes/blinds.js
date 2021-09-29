@@ -125,7 +125,7 @@ module.exports = function(RED) {
 	  });
 
     // Events beim Flow starten
-    RED.events.once("nodes-started", () => {
+    RED.events.once("flows:started", () => {
     	node.functioncyclic = setInterval(cyclic,20000);
     });
 
