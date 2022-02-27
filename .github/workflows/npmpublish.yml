@@ -17,7 +17,7 @@ jobs:
             node-version: 12
             registry-url: https://registry.npmjs.org/
       - name: Publish if version has been updated
-        uses: houtinanze/npm-publish-action@master
+        uses: node-red-contrib-pyrler/npm-publish-action@master
         with: #All of these Inputs are optional
           tag_name: "v%s"
           tag_message: "v%s"
