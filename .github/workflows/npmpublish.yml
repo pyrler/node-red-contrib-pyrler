@@ -16,5 +16,5 @@ jobs:
       - run: npm install
       - run: npm test
       - uses: JS-DevTools/npm-publish@v1
-          with:
-            token: ${{ secrets.NPM_TOKEN }} # You need to set this in your repo settings
+        with:
+          token: ${{ secrets.NPM_AUTH_TOKEN }} # You need to set this in your repo settings
