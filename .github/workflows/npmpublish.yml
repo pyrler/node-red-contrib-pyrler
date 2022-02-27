@@ -22,9 +22,6 @@ jobs:
           tag_name: "v%s"
           tag_message: "v%s"
           commit_pattern: "^(?:Release|Version) (\\S+)"
-      - name: checkout
-        uses: actions/checkout@master
-      - run: npm publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this as is, it's automatically generated
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} # You need to set this in your repo settings
