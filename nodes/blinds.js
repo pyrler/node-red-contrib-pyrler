@@ -39,7 +39,7 @@ module.exports = function(RED) {
 			intern.ab = false;
 			clearTimeout(node.timerAuf);
 			clearTimeout(node.timerAb);
-			node.send(sender(intern.auf,intern.ab,null,null));
+			node.send(sender(intern.auf,intern.ab));
 			umkehrzeit(richtung);
     }
 
@@ -47,15 +47,15 @@ module.exports = function(RED) {
 		  if (richtung === "auf") {
 			  intern.auf = true;
         intern.stand = "auf";
-			  node.send(sender(intern.auf,null));
+			  node.send(sender(intern.auf));
 			  node.timerAuf = setTimeout(stop, node.config.timeUp);
-			  node.status({ "fill": "blue", "shape": "dot", "text": "Drive Up for time: " + node.config.timeUp/1000 + "s"});
+			  node.status({ "fill": "blue", "shape": "dot", "text": "Fahrzeit hoch: " + node.config.timeUp/1000 + "s"});
 		  } else if (richtung === "ab") {
 			  intern.ab = true;
         intern.stand = "ab";
 			  node.send(sender(null,intern.ab));
 			  node.timerAb = setTimeout(stop, node.config.timeUp);
-			  node.status({ "fill": "blue", "shape": "dot", "text": "Drive Down for time: "  + node.config.timeUp/1000 + "s"});
+			  node.status({ "fill": "blue", "shape": "dot", "text": "Fahrzeit ab: "  + node.config.timeUp/1000 + "s"});
 			}
 	  }
 
@@ -63,7 +63,7 @@ module.exports = function(RED) {
 		  intern.auf = false;
 		  intern.ab = false ;
 		  node.send(sender(intern.auf,intern.ab));
-		  node.status({ "fill": "green", "shape": "dot", "text": "Stand still"});
+		  node.status({ "fill": "green", "shape": "dot", "text": "Stop"});
 	   }
 
     function umkehrzeit(richtung) {

@@ -12,7 +12,6 @@
     "node",
     "red",
     "unifi",
-    "sonos",
     "blinds"
   ],
   "dependencies": {
@@ -31,7 +30,6 @@
     "nodes": {
       "unifi": "nodes/unifi.js",
       "controller-config": "nodes/controller-config.js",
-      "sonos-sender": "nodes/sonos-sender.js",
       "blinds": "nodes/blinds.js"
     }
   },
