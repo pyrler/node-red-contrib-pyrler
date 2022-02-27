@@ -1,8 +1,9 @@
 name: Node.js Package
 
 on:
-  tag:
-    types: [created]
+  push:
+    branches:
+      - master
 
 jobs:
   npm-publish:
