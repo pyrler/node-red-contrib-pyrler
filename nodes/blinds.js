@@ -31,7 +31,7 @@ module.exports = function(RED) {
           return {payload:item}
         }
       }
-      return [name(out1),name(out2),name(out3),name(out4)];
+      return [name(out1),name(out2),name(out3),name(out4),name(intern.stand)];
     }
 
     function Motorfahren(richtung)  {
