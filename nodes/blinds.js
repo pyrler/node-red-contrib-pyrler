@@ -104,6 +104,9 @@ module.exports = function(RED) {
             Motorfahren("auf");
           }
         break;
+        case "stop":
+          stop();
+        break;
         case "automatik":
           intern.handUp = false;
           intern.handDown = false;
